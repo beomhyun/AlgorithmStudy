@@ -5,35 +5,29 @@ public class week2 {
 		String answer = "";
 
 		for (int i = 0; i < scores.length; i++) {
-			boolean maxDuplicate = false;
-			boolean minDuplicate = false;
 			int max = Integer.MIN_VALUE;
 			int min = Integer.MAX_VALUE;
 			int sum = 0;
+			int temp = scores[i][i];
+			boolean check = false;
+
 			for (int j = 0; j < scores.length; j++) {
+				max = Math.max(max, scores[j][i]);
+				min = Math.min(min, scores[j][i]);
 				sum += scores[j][i];
-				if (scores[j][i] == max) {
-					maxDuplicate = true;
-				} else {
-					max = Math.max(max, scores[j][i]);
-					maxDuplicate = false;
-				}
-				if (scores[j][i] == min) {
-					minDuplicate = true;
-				} else {
-					min = Math.min(min, scores[j][i]);
-					minDuplicate = false;
+				if (i != j) {
+					if (scores[j][i] == temp) {
+						check = true;
+					}
 				}
 			}
 			int avg = 0;
-			if ((!maxDuplicate && scores[i][i] == max) || (!minDuplicate && scores[i][i] == min)) {
+			if (!check && (max == temp || min == temp)) {
 				sum -= scores[i][i];
 				avg = sum / (scores.length - 1);
 			} else {
 				avg = sum / scores.length;
 			}
-
-
 			if (avg >= 90) {
 				answer += "A";
 			} else if (avg >= 80) {
@@ -52,5 +46,6 @@ public class week2 {
 
 	public static void main(String[] args) {
 		int[][] scores = { { 50, 90 }, { 50, 87 } };
+		solution(scores);
 	}
 }
