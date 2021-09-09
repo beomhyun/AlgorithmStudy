@@ -1,6 +1,7 @@
 package kakaoBlind2021;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -16,6 +17,13 @@ public class RankSearch {
 						Integer.parseInt(st.nextToken())));
 			}
 		}
+		infoList.sort(new Comparator<Info>() {
+
+			@Override
+			public int compare(Info o1, Info o2) {
+				return o1.score - o2.score;
+			}
+		});
 
 		for (int i = 0; i < query.length; i++) {
 			String temp = query[i];
@@ -27,16 +35,32 @@ public class RankSearch {
 			int score = Integer.parseInt(st.nextToken());
 
 			int count = 0;
-
-			for (Info infoData : infoList) {
-				if (infoData.ansQuery(language, job, career, soulFood, score)) {
+			int index = findClosest(infoList, score);
+			for (int j = index; j < infoList.size(); j++) {
+				if (infoList.get(j).ansQuery(language, job, career, soulFood, score)) {
 					count++;
 				}
 			}
 			answer[i] = count;
+			System.out.println(count);
 		}
 
 		return answer;
+	}
+
+	static int findClosest(List<Info> infoList, int target) {
+		int l = 0, h = infoList.size() - 1, diff = Integer.MAX_VALUE, mid = 0;
+		while (l <= h) {
+			mid = l + (h - l) / 2;
+			if (Math.abs(target - infoList.get(mid).score) < diff) {
+				diff = Math.abs(target - infoList.get(mid).score);
+			}
+			if (infoList.get(mid).score < target)
+				l = mid + 1;
+			else
+				h = mid - 1;
+		}
+		return mid;
 	}
 
 	public class Info {
